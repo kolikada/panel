@@ -1,3 +1,140 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* --- FIX: BROWSER AUTOFILL BACKGROUND AND TEXT COLOR --- */
+
+input,
+textarea,
+select {
+    /* Use neutral-700 shade for background */
+    background-color: hsl(209, 18%, 30%) !important; 
+    
+    /* Use light text color */
+    color: #fff !important;
+    
+    /* Match border color to theme */
+    border-color: hsl(215, 18%, 20%) !important; 
+    
+    /* Ensure cursor is visible */
+    caret-color: white !important; 
+}
+
+/* Ensure the autofill styles also use these values for consistency */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    /* Box-shadow background trick using neutral-700 color */
+    -webkit-box-shadow: 0 0 0px 1000px hsl(209, 18%, 30%) inset !important; 
+    
+    /* Ensure text color stays light */
+    -webkit-text-fill-color: #fff !important; 
+    color: #fff !important; 
+}
+
+/* 2. Style for regular input background to ensure consistency */
+/* (This ensures manually typed text and non-autofilled fields also match the dark style) */
+input {
+    /* CHANGE THIS VALUE from 15% lightness to 30% lightness (neutral-700) */
+    background-color: hsl(209, 18%, 30%) !important; 
+    
+    border-color: hsl(215, 18%, 20%) !important;
+    color: #fff !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    /* Border color change (using the exact hex of your primary-500) */
+    border-color: #18DBFF !important; 
+    
+    /* Apply the custom glow effect using box-shadow */
+    /* RGB values derived from your primary-500 (#18DBFF) */
+    box-shadow: 0 0 0 3px rgba(18, 219, 255, 0.5) !important; 
+    
+    /* Ensure background stays dark when focused */
+    background-color: hsl(209, 18%, 30%) !important; /* Your neutral-700 shade */
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: hsl(218, 20%, 15%); /* Your neutral-800 shade for the background */
+}
+
+/* Targets the thumb (the moveable part) */
+::-webkit-scrollbar-thumb {
+    background-color: hsl(215, 18%, 20%); /* Your neutral-700 shade (slightly lighter) */
+    border-radius: 4px;
+}
+
+/* --- ADMINLTE SKIN-TEKKURA OVERRIDES --- */
+
+/* Fixes the top navigation bar background and sidebar header background */
+.skin-tekura .main-header .navbar,
+.skin-tekura .main-header .logo {
+    background-color: #1a2226; /* neutral-900 or similar deep dark shade */
+}
+
+.skin-tekura .sidebar-menu > li > a {
+    /* Use your primary-500 hex value */
+    color: #18DBFF !important; 
+    background-color: transparent !important;
+}
+
+/* Targets the icon (i tag with class fa) inside the link */
+.skin-tekura .sidebar-menu > li > a > i {
+    /* Ensures the icon color is also electric blue */
+    color: #18DBFF !important;
+}
+
+/* Ensures the active highlight border still works and is visible */
+.skin-tekura .sidebar-menu > li.active > a,
+.skin-tekura .sidebar-menu > li:hover > a {
+    border-left-color: #18DBFF !important; /* Forces the active bar color */
+    color: #18DBFF !important; /* Forces text color on hover/active */
+    background-color: hsl(209, 18%, 30%) !important; /* Neutral-700 for the active background */
+}
+
+skin-tekura .sidebar a {
+    /* Use your primary-500 hex value */
+    color: #18DBFF !important; 
+    /* Also ensure the background is dark for contrast */
+    background-color: transparent !important;
+}
+
+/* Ensure the link icons (i tags) also use the bright color */
+.skin-tekura .sidebar-menu > li > a > .fa {
+    color: #18DBFF !important;
+}
+
+.content-wrapper .box {
+    border-top-color: #1a2226; /* Match border to dark theme */
+}
+
+/* Force all box headers to a dark background (your neutral-700/800 shade) */
+.box-header {
+    background: hsl(209, 18%, 30%) !important; /* neutral-700 shade */
+    color: #fff !important; /* Ensure text is visible */
+}
+
+/* Ensure the Administration Overview main title text is visible */
+.content-header h1, .content-header p {
+    color: #fff !important;
+}
+/* --- TOP HEADER AND SIDEBAR HEADER FIX --- */
+
+/* Re-apply background to the main containers with !important */
+.main-sidebar,
+.main-sidebar .sidebar,
+.skin-tekura .main-sidebar {
+    background-color: hsl(220, 25%, 10%) !important; /* Neutral-900 */
+}
+
+.skin-tekura .main-header .navbar,
+.skin-tekura .main-header .logo {
+    /* Use your darkest shade and !important */
+    background-color: hsl(220, 25%, 10%) !important; /* neutral-900 shade */
+    /* Ensure the top header links and text are white */
+    color: #fff !important; 
+}

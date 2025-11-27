@@ -14,7 +14,7 @@
         <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#bc6e3c">
         <link rel="shortcut icon" href="/favicons/favicon.ico">
         <meta name="msapplication-config" content="/favicons/browserconfig.xml">
-        <meta name="theme-color" content="#0e4688">
+        <meta name="theme-color" content="#18DBFF">
 
         @include('layouts.scripts')
 
@@ -35,97 +35,97 @@
             <![endif]-->
         @show
     </head>
-    <body class="hold-transition skin-blue fixed sidebar-mini">
+    <body class="hold-transition skin-tekura fixed sidebar-mini bg-neutral-900" style="color: #18DBFF !important;">
         <div class="wrapper">
-            <header class="main-header">
-                <a href="{{ route('index') }}" class="logo">
-                    <span>{{ config('app.name', 'Tekkura') }}</span>
+            <header class="main-header" style="color: #18DBFF !important;">
+                <a href="{{ route('index') }}" class="logo" style="color: #18DBFF !important;" >
+                    <img src="/assets/svgs/Tekkura.svg" alt="Tekkura Panel" style="height: 30px; margin-top: -5px;" /> Tekkura Panel
                 </a>
                 <nav class="navbar navbar-static-top">
-                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" style="color: #18DBFF !important;">
+                        <span  class="sr-only">Toggle navigation</span >
+                        <span  class="icon-bar"></span >
+                        <span  class="icon-bar"></span >
+                        <span  class="icon-bar"></span >
                     </a>
-                    <div class="navbar-custom-menu">
+                    <div class="navbar-custom-menu" >
                         <ul class="nav navbar-nav">
                             <li class="user-menu">
-                                <a href="{{ route('account') }}">
+                                <a href="{{ route('account') }}" style="color: #18DBFF !important;">
                                     <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(Auth::user()->email)) }}?s=160" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">{{ Auth::user()->name_first }} {{ Auth::user()->name_last }}</span>
+                                    <span  class="hidden-xs">{{ Auth::user()->name_first }} {{ Auth::user()->name_last }}</span >
                                 </a>
                             </li>
                             <li>
-                                <li><a href="{{ route('index') }}" data-toggle="tooltip" data-placement="bottom" title="Exit Admin Control"><i class="fa fa-server"></i></a></li>
+                                <li><a href="{{ route('index') }}" data-toggle="tooltip" data-placement="bottom" title="Exit Admin Control" style="color: #18DBFF !important;"><i class="fa fa-server"></i></a></li>
                             </li>
                             <li>
-                                <li><a href="{{ route('auth.logout') }}" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+                                <li><a href="{{ route('auth.logout') }}" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="Logout" style="color: #18DBFF !important;"><i class="fa fa-sign-out"></i></a></li>
                             </li>
                         </ul>
                     </div>
                 </nav>
             </header>
-            <aside class="main-sidebar">
-                <section class="sidebar">
+            <aside class="main-sidebar" style="background-color: hsl(220, 25%, 10%) !important;">
+                <section class="sidebar" style="background-color: hsl(220, 25%, 10%) !important;">
                     <ul class="sidebar-menu">
                         <li class="header">ADMINISTRATION</li>
                         <li class="{{ Route::currentRouteName() !== 'admin.index' ?: 'active' }}">
                             <a href="{{ route('admin.index') }}">
-                                <i class="fa fa-home"></i> <span>Overview</span>
+                                <i class="fa fa-home" style="color: #18DBFF !important;"></i> <span  style="color: #18DBFF !important;">Overview</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.settings') ?: 'active' }}">
                             <a href="{{ route('admin.settings')}}">
-                                <i class="fa fa-wrench"></i> <span>Settings</span>
+                                <i class="fa fa-wrench" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Settings</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.api') ?: 'active' }}">
                             <a href="{{ route('admin.api.index')}}">
-                                <i class="fa fa-gamepad"></i> <span>Application API</span>
+                                <i class="fa fa-gamepad" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Application API</span >
                             </a>
                         </li>
                         <li class="header">MANAGEMENT</li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.databases') ?: 'active' }}">
                             <a href="{{ route('admin.databases') }}">
-                                <i class="fa fa-database"></i> <span>Databases</span>
+                                <i class="fa fa-database" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Databases</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.locations') ?: 'active' }}">
                             <a href="{{ route('admin.locations') }}">
-                                <i class="fa fa-globe"></i> <span>Locations</span>
+                                <i class="fa fa-globe" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Locations</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.nodes') ?: 'active' }}">
                             <a href="{{ route('admin.nodes') }}">
-                                <i class="fa fa-sitemap"></i> <span>Nodes</span>
+                                <i class="fa fa-sitemap" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Nodes</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.servers') ?: 'active' }}">
                             <a href="{{ route('admin.servers') }}">
-                                <i class="fa fa-server"></i> <span>Servers</span>
+                                <i class="fa fa-server" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Servers</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.users') ?: 'active' }}">
                             <a href="{{ route('admin.users') }}">
-                                <i class="fa fa-users"></i> <span>Users</span>
+                                <i class="fa fa-users"style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Users</span >
                             </a>
                         </li>
                         <li class="header">SERVICE MANAGEMENT</li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.mounts') ?: 'active' }}">
                             <a href="{{ route('admin.mounts') }}">
-                                <i class="fa fa-magic"></i> <span>Mounts</span>
+                                <i class="fa fa-magic" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Mounts</span >
                             </a>
                         </li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.nests') ?: 'active' }}">
                             <a href="{{ route('admin.nests') }}">
-                                <i class="fa fa-th-large"></i> <span>Nests</span>
+                                <i class="fa fa-th-large" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Nests</span >
                             </a>
                         </li>
                     </ul>
                 </section>
             </aside>
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="color: #18DBFF !important;">
                 <section class="content-header">
                     @yield('content-header')
                 </section>

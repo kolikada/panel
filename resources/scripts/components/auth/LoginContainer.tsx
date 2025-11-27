@@ -74,13 +74,20 @@ const LoginContainer = ({ history }: RouteComponentProps) => {
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
-                <LoginFormContainer title={'Login to Continue'} css={tw`w-full flex`}>
-                    <Field light type={'text'} label={'Username or Email'} name={'username'} disabled={isSubmitting} />
+                <LoginFormContainer title={'Tekkura Panel Login'} css={tw`w-full flex`}>
+                    <Field type={'text'} label={'Username or Email'} name={'username'} disabled={isSubmitting} />
                     <div css={tw`mt-6`}>
-                        <Field light type={'password'} label={'Password'} name={'password'} disabled={isSubmitting} />
+                        <Field type={'password'} label={'Password'} name={'password'} disabled={isSubmitting} />
                     </div>
-                    <div css={tw`mt-6`}>
-                        <Button type={'submit'} size={'xlarge'} isLoading={isSubmitting} disabled={isSubmitting}>
+                    <div css={tw`mt-6 flex justify-center`}>
+                        <Button
+                            color={'primary'}
+                            type={'submit'}
+                            size={'xlarge'}
+                            isLoading={isSubmitting}
+                            disabled={isSubmitting}
+                            css={tw`bg-neutral-800 border-2 border-primary-500 text-primary-500 hover:bg-neutral-700 rounded-xl  /* Use rounded-full for a pill shape */shadow-primary-glow transition duration-150`}
+                        >
                             Login
                         </Button>
                     </div>
@@ -102,7 +109,7 @@ const LoginContainer = ({ history }: RouteComponentProps) => {
                     <div css={tw`mt-6 text-center`}>
                         <Link
                             to={'/auth/password'}
-                            css={tw`text-xs text-neutral-500 tracking-wide no-underline uppercase hover:text-neutral-600`}
+                            css={tw`text-xs text-neutral-300 tracking-wide no-underline uppercase hover:text-neutral-100`}
                         >
                             Forgot password?
                         </Link>

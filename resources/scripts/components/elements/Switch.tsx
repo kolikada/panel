@@ -25,7 +25,7 @@ const ToggleContainer = styled.div`
         transition: all 75ms linear;
 
         &::before {
-            ${tw`absolute block bg-white border h-5 w-5 rounded-full`};
+            ${tw`absolute block bg-neutral-800 border h-5 w-5 rounded-full`};
             top: 0.125rem;
             right: calc(50% + 0.125rem);
             //width: 1.25rem;

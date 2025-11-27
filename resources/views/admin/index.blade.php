@@ -22,7 +22,7 @@
                 box-danger
             @endif
         ">
-            <div class="box-header with-border">
+            <div class="box-header with-border bg-neutral-800">
                 <h3 class="box-title">System Information</h3>
             </div>
             <div class="box-body">
