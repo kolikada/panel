@@ -138,3 +138,52 @@ skin-tekura .sidebar a {
     /* Ensure the top header links and text are white */
     color: #fff !important; 
 }
+
+.content-wrapper {
+    /* Use your darkest shade (neutral-900), which is around hsl(220, 25%, 10%) */
+    background-color: hsl(220, 25%, 10%) !important; 
+    /* Ensures padding is consistent */
+    padding: 15px; 
+}
+
+/* Ensure the wrapper's border is removed or set to dark color */
+.content-wrapper, .main-footer {
+    border-top: 1px solid hsl(220, 25%, 10%) !important; /* Matches neutral-900 */
+}
+
+.login-card-blur {
+    /* Highest specificity rule to apply the blur */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}.grecaptcha-badge {
+  width: 70px !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+  left: -100px !important;
+}
+
+.grecaptcha-badge:hover {
+  width: 256px !important;
+}
+
+.grecaptcha-badge {
+    visibility: hidden !important; 
+}
+
+.content-wrapper {
+    background-color: hsl(220, 25%, 10%) !important; /* Forces Neutral-900 (Deepest Navy) */
+}
+
+/* Targets the main page body in the React context if needed */
+body {
+    background-color: hsl(220, 25%, 10%) !important;
+}
+
+::-webkit-scrollbar {
+    height: 8px; /* Keeps it thin horizontally */
+    background-color: transparent; /* Makes the track invisible */
+}
+::-webkit-scrollbar-thumb {
+    background-color: hsl(215, 18%, 20%); /* Dark thumb */
+    border-radius: 4px;
+}

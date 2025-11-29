@@ -20,6 +20,7 @@ import { useLocation } from 'react-router';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import routes from '@/routers/routes';
+import tw from 'twin.macro';
 
 export default () => {
     const match = useRouteMatch<{ id: string }>();
@@ -73,54 +74,98 @@ export default () => {
                 )
             ) : (
                 <>
-                    <CSSTransition timeout={150} classNames={'fade'} appear in>
-                        <SubNavigation>
-                            <div>
-                                {routes.server
-                                    .filter((route) => !!route.name)
-                                    .map((route) =>
-                                        route.permission ? (
-                                            <Can key={route.path} action={route.permission} matchAny>
-                                                <NavLink to={to(route.path, true)} exact={route.exact}>
+                    {/* --- SUB NAVIGATION WRAPPER --- */}
+                    <div css={tw`max-w-6xl mx-auto px-4`}>
+                        <CSSTransition timeout={150} classNames={'fade'} appear in>
+                            <SubNavigation>
+                                <div>
+                                    {routes.server
+                                        .filter((route) => !!route.name)
+                                        // --- ADMIN PERMISSION FILTER ---
+                                        .filter((route) => {
+                                            // Hide 'Startup' tab if user is NOT an admin
+                                            if (route.path === '/startup' && !rootAdmin) return false;
+
+                                            // Hide 'Settings' tab if user is NOT an admin
+                                            //if (route.path === '/settings' && !rootAdmin) return false;
+
+                                            // Hide 'Databases' tab if user is NOT an admin (Optional - remove if you want clients to see it)
+                                            // if (route.path === '/databases' && !rootAdmin) return false;
+                                            if (route.path === '/network' && !rootAdmin) return false;
+
+                                            return true;
+                                        })
+                                        // -------------------------------
+                                        .map((route) =>
+                                            route.permission ? (
+                                                <Can key={route.path} action={route.permission} matchAny>
+                                                    <NavLink to={to(route.path, true)} exact={route.exact}>
+                                                        {route.name}
+                                                    </NavLink>
+                                                </Can>
+                                            ) : (
+                                                <NavLink key={route.path} to={to(route.path, true)} exact={route.exact}>
                                                     {route.name}
                                                 </NavLink>
-                                            </Can>
-                                        ) : (
-                                            <NavLink key={route.path} to={to(route.path, true)} exact={route.exact}>
-                                                {route.name}
-                                            </NavLink>
-                                        )
+                                            )
+                                        )}
+                                    {rootAdmin && (
+                                        // eslint-disable-next-line react/jsx-no-target-blank
+                                        <a href={`/admin/servers/view/${serverId}`} target={'_blank'}>
+                                            <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                        </a>
                                     )}
-                                {rootAdmin && (
-                                    // eslint-disable-next-line react/jsx-no-target-blank
-                                    <a href={`/admin/servers/view/${serverId}`} target={'_blank'}>
-                                        <FontAwesomeIcon icon={faExternalLinkAlt} />
-                                    </a>
-                                )}
-                            </div>
-                        </SubNavigation>
-                    </CSSTransition>
+
+                                    {/* --- RIGHT SIDE AESTHETIC FILLER --- */}
+                                    <section css={tw`ml-auto flex items-center hidden md:flex whitespace-nowrap`}>
+                                        {/* Glowing Dot - Fixed height/width to prevent squishing */}
+                                        <div
+                                            css={tw`w-2 h-2 min-w-[0.5rem] bg-primary-500 rounded-full mr-3 shadow-primary-glow animate-pulse`}
+                                        ></div>
+
+                                        {/* Text - Added flex to align text parts */}
+                                        <div css={tw`text-xs font-mono text-neutral-400 flex items-center`}>
+                                            <span>
+                                                ID: <span css={tw`text-neutral-200`}>{uuid?.split('-')[0]}</span>
+                                            </span>
+                                            <span css={tw`mx-3 text-neutral-600`}>|</span>
+                                            <span css={tw`text-primary-500 uppercase font-bold tracking-wider`}>
+                                                Tekkura Secured
+                                            </span>
+                                        </div>
+                                    </section>
+                                    {/* ----------------------------------- */}
+                                </div>
+                            </SubNavigation>
+                        </CSSTransition>
+                    </div>
+
                     <InstallListener />
                     <TransferListener />
                     <WebsocketHandler />
-                    {inConflictState && (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
-                        <ConflictStateRenderer />
-                    ) : (
-                        <ErrorBoundary>
-                            <TransitionRouter>
-                                <Switch location={location}>
-                                    {routes.server.map(({ path, permission, component: Component }) => (
-                                        <PermissionRoute key={path} permission={permission} path={to(path)} exact>
-                                            <Spinner.Suspense>
-                                                <Component />
-                                            </Spinner.Suspense>
-                                        </PermissionRoute>
-                                    ))}
-                                    <Route path={'*'} component={NotFound} />
-                                </Switch>
-                            </TransitionRouter>
-                        </ErrorBoundary>
-                    )}
+
+                    {/* --- MAIN CONTENT WRAPPER --- */}
+                    <div css={tw`max-w-6xl mx-auto p-4`}>
+                        {inConflictState &&
+                        (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                            <ConflictStateRenderer />
+                        ) : (
+                            <ErrorBoundary>
+                                <TransitionRouter>
+                                    <Switch location={location}>
+                                        {routes.server.map(({ path, permission, component: Component }) => (
+                                            <PermissionRoute key={path} permission={permission} path={to(path)} exact>
+                                                <Spinner.Suspense>
+                                                    <Component />
+                                                </Spinner.Suspense>
+                                            </PermissionRoute>
+                                        ))}
+                                        <Route path={'*'} component={NotFound} />
+                                    </Switch>
+                                </TransitionRouter>
+                            </ErrorBoundary>
+                        )}
+                    </div>
                 </>
             )}
         </React.Fragment>

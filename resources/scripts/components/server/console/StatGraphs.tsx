@@ -32,11 +32,14 @@ export default () => {
             },
         },
         callback(opts, index) {
+            // --- UPDATED COLORS: Use primary-500 for line and fill ---
             return {
                 ...opts,
                 label: !index ? 'Network In' : 'Network Out',
-                borderColor: !index ? theme('colors.cyan.400') : theme('colors.yellow.400'),
-                backgroundColor: hexToRgba(!index ? theme('colors.cyan.700') : theme('colors.yellow.700'), 0.5),
+                // Set both lines to primary color for unified theme (using different shades if preferred)
+                borderColor: !index ? theme('colors.primary.500') : theme('colors.primary.400'),
+                // Set background fill to a transparent version of the primary color
+                backgroundColor: hexToRgba(!index ? theme('colors.primary.500') : theme('colors.primary.400'), 0.15),
             };
         },
     });
@@ -79,10 +82,12 @@ export default () => {
                 legend={
                     <>
                         <Tooltip arrow content={'Inbound'}>
-                            <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} />
+                            {/* UPDATED ICON COLOR */}
+                            <CloudDownloadIcon className={'mr-2 w-4 h-4 text-primary-500'} />
                         </Tooltip>
                         <Tooltip arrow content={'Outbound'}>
-                            <CloudUploadIcon className={'w-4 h-4 text-cyan-400'} />
+                            {/* UPDATED ICON COLOR */}
+                            <CloudUploadIcon className={'w-4 h-4 text-primary-800'} />
                         </Tooltip>
                     </>
                 }

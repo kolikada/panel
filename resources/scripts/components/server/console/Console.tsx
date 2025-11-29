@@ -20,9 +20,12 @@ import 'xterm/css/xterm.css';
 import styles from './style.module.css';
 
 const theme = {
-    background: th`colors.black`.toString(),
+    // Change background to your neutral-900 (Deep Navy/Black)
+    background: '#131a20', // Matches the hsl(220, 25%, 10%) used earlier
     cursor: 'transparent',
-    black: th`colors.black`.toString(),
+    // Also update black to match
+    black: '#131a20',
+
     red: '#E54B4B',
     green: '#9ECE58',
     yellow: '#FAED70',
@@ -192,7 +195,12 @@ export default () => {
     }, [connected, instance]);
 
     return (
-        <div className={classNames(styles.terminal, 'relative')}>
+        <div
+            className={classNames(
+                styles.terminal,
+                'relative bg-neutral-900 rounded-xl border-2 border-primary-500 shadow-primary-glow overflow-hidden'
+            )}
+        >
             <SpinnerOverlay visible={!connected} size={'large'} />
             <div
                 className={classNames(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}
@@ -204,7 +212,10 @@ export default () => {
             {canSendCommands && (
                 <div className={classNames('relative', styles.overflows_container)}>
                     <input
-                        className={classNames('peer', styles.command_input)}
+                        className={classNames(
+                            'peer bg-transparent text-neutral-100 placeholder-neutral-500 focus:ring-0 border-none',
+                            styles.command_input
+                        )}
                         type={'text'}
                         placeholder={'Type a command...'}
                         aria-label={'Console command input.'}

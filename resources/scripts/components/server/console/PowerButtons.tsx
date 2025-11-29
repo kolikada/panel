@@ -4,6 +4,7 @@ import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
 import { Dialog } from '@/components/elements/dialog';
+import tw from 'twin.macro';
 
 interface PowerButtonProps {
     className?: string;
@@ -37,7 +38,7 @@ export default ({ className }: PowerButtonProps) => {
     }, [status]);
 
     return (
-        <div className={className}>
+        <div className={className} css={tw`flex space-x-4`}>
             <Dialog.Confirm
                 open={open}
                 hideCloseIcon
@@ -48,23 +49,44 @@ export default ({ className }: PowerButtonProps) => {
             >
                 Forcibly stopping a server can lead to data corruption.
             </Dialog.Confirm>
+
             <Can action={'control.start'}>
                 <Button
                     className={'flex-1'}
+                    // START: Force White Text and Rounded Corners
+                    css={tw`
+                        !rounded-xl !text-white !font-bold 
+                        /* Optional: Increase shadow for theme consistency */
+                        shadow-md
+                    `}
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
                 >
                     Start
                 </Button>
             </Can>
+
             <Can action={'control.restart'}>
-                <Button.Text className={'flex-1'} disabled={!status} onClick={onButtonClick.bind(this, 'restart')}>
+                <Button.Text
+                    className={'flex-1'}
+                    // RESTART: Force White Text, Dark BG, and Rounded Corners
+                    css={tw`
+                        !rounded-xl !text-white !font-bold 
+                        /* Force dark background for contrast */
+                        !bg-neutral-600 hover:!bg-neutral-500 
+                    `}
+                    disabled={!status}
+                    onClick={onButtonClick.bind(this, 'restart')}
+                >
                     Restart
                 </Button.Text>
             </Can>
+
             <Can action={'control.stop'}>
                 <Button.Danger
                     className={'flex-1'}
+                    // STOP: Force White Text and Rounded Corners
+                    css={tw`!rounded-xl !text-white !font-bold shadow-md`}
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                 >

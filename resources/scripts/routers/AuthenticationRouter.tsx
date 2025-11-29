@@ -1,29 +1,29 @@
 import React from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import LoginContainer from '@/components/auth/LoginContainer';
 import ForgotPasswordContainer from '@/components/auth/ForgotPasswordContainer';
-import ResetPasswordContainer from '@/components/auth/ResetPasswordContainer';
+//import ResetPasswordContainer from '@/components/auth/ResetPasswordContainer';
 import LoginCheckpointContainer from '@/components/auth/LoginCheckpointContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
-import { useHistory, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import tw from 'twin.macro';
 
 export default () => {
-    const history = useHistory();
+    //const history = useHistory();
     const location = useLocation();
-    const { path } = useRouteMatch();
+    //const { path } = useRouteMatch();
 
     return (
-        <div css={tw`min-h-screen flex items-center justify-center p-4 xl:p-32 bg-neutral-900`}>
+        // Full-screen wrapper with background image
+        <div
+            css={tw`min-h-screen flex items-center justify-center relative bg-cover bg-center bg-no-repeat`}
+            style={{ backgroundImage: 'url("/assets/images/Tekkuralogin.png")' }}
+        >
             <Switch location={location}>
-                <Route path={`${path}/login`} component={LoginContainer} exact />
-                <Route path={`${path}/login/checkpoint`} component={LoginCheckpointContainer} />
-                <Route path={`${path}/password`} component={ForgotPasswordContainer} exact />
-                <Route path={`${path}/password/reset/:token`} component={ResetPasswordContainer} />
-                <Route path={`${path}/checkpoint`} />
-                <Route path={'*'}>
-                    <NotFound onBack={() => history.push('/auth/login')} />
-                </Route>
+                <Route path={'/auth/login'} component={LoginContainer} exact />
+                <Route path={'/auth/password'} component={ForgotPasswordContainer} />
+                <Route path={'/auth/checkpoint'} component={LoginCheckpointContainer} />
+                <Route path={'*'} component={NotFound} />
             </Switch>
         </div>
     );

@@ -17,24 +17,41 @@ const RightNavigation = styled.div`
     & > a,
     & > button,
     & > .navigation-link {
-        ${tw`flex items-center h-full no-underline text-neutral-400 px-6 cursor-pointer transition-all duration-150`}; // Changed to 400
+        // Added 'relative' so we can position the bar inside
+        ${tw`relative flex items-center h-full no-underline text-neutral-400 px-6 cursor-pointer transition-all duration-150`};
 
         &:active,
         &:hover {
-            ${tw`text-primary-500 bg-neutral-800`}; // Changed text to primary-500 and bg to neutral-800
+            ${tw`text-primary-500 bg-neutral-800`};
         }
 
         &:active,
         &:hover,
         &.active {
-            // Changed cyan.600 to primary.500
-            box-shadow: inset 0 -2px ${theme`colors.primary.500`.toString()};
+            // Remove the old box-shadow line
+            box-shadow: none;
+
+            // Create the new glowing "Energy Dash" bar
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%); /* Center it */
+
+                width: 20px; /* Make it short */
+                height: 3px; /* Make it thick */
+                border-radius: 4px 4px 0 0; /* Round the top corners */
+
+                /* Color & Glow */
+                background-color: ${theme`colors.primary.500`.toString()};
+                box-shadow: 0 -2px 8px ${theme`colors.primary.500`.toString()};
+            }
         }
     }
 `;
 
 export default () => {
-    const name = useStoreState((state: ApplicationStore) => state.settings.data!.name);
     const rootAdmin = useStoreState((state: ApplicationStore) => state.user.data!.rootAdmin);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -47,30 +64,28 @@ export default () => {
     };
 
     return (
-        <div className={'w-full bg-neutral-900 shadow-md overflow-x-auto'}>
+        // Added border-b border-neutral-800 for the subtle separator line
+        <div className={'w-full bg-neutral-900 overflow-x-auto'}>
             <SpinnerOverlay visible={isLoggingOut} />
             <div className={'mx-auto w-full flex items-center h-[3.5rem] max-w-[1200px]'}>
+                {/* --- LEFT SIDE: LOGO & BRANDING --- */}
                 <div id={'logo'} className={'flex-1'}>
-                    <Link
-                        to={'/'}
-                        className={
-                            // Removed existing color classes since we will apply color directly to text
-                            'px-4 no-underline transition-colors duration-150 flex items-center'
-                        }
-                    >
+                    <Link to={'/'} className={'px-4 no-underline transition-colors duration-150 flex items-center'}>
                         <img src='/assets/svgs/Tekkura.svg' alt='Tekkura Logo' style={{ height: '32px' }} />
-
-                        {/* Added custom text with electric blue/teal color and spacing */}
-                        <span className={'text-xl font-header ml-2 text-primary-500'}>{name}</span>
+                        <span className={'text-xl font-header ml-2 text-primary-500'}>Tekkura</span>
                     </Link>
                 </div>
+
+                {/* --- RIGHT SIDE: ICONS & ENERGY DASH --- */}
                 <RightNavigation className={'flex h-full items-center justify-center'}>
                     <SearchContainer />
+
                     <Tooltip placement={'bottom'} content={'Dashboard'}>
                         <NavLink to={'/'} exact>
                             <FontAwesomeIcon icon={faLayerGroup} />
                         </NavLink>
                     </Tooltip>
+
                     {rootAdmin && (
                         <Tooltip placement={'bottom'} content={'Admin'}>
                             <a href={'/admin'} rel={'noreferrer'}>
@@ -85,6 +100,7 @@ export default () => {
                             </span>
                         </NavLink>
                     </Tooltip>
+
                     <Tooltip placement={'bottom'} content={'Sign Out'}>
                         <button onClick={onTriggerLogout}>
                             <FontAwesomeIcon icon={faSignOutAlt} />

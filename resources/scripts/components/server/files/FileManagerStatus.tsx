@@ -1,105 +1,120 @@
-import React, { useContext, useEffect } from 'react';
-import { ServerContext } from '@/state/server';
-import { CloudUploadIcon, XIcon } from '@heroicons/react/solid';
-import asDialog from '@/hoc/asDialog';
-import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
+import React, { useEffect } from 'react';
+import { httpErrorToHuman } from '@/api/http';
+import { CSSTransition } from 'react-transition-group';
+import Spinner from '@/components/elements/Spinner';
+import FileObjectRow from '@/components/server/files/FileObjectRow';
+import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
+import { FileObject } from '@/api/server/files/loadDirectory';
+import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
+import { NavLink, useLocation } from 'react-router-dom';
+import Can from '@/components/elements/Can';
+import { ServerError } from '@/components/elements/ScreenBlock';
+import tw from 'twin.macro';
 import { Button } from '@/components/elements/button/index';
-import Tooltip from '@/components/elements/tooltip/Tooltip';
-import Code from '@/components/elements/Code';
-import { useSignal } from '@preact/signals-react';
+import { ServerContext } from '@/state/server';
+import useFileManagerSwr from '@/plugins/useFileManagerSwr';
+import FileManagerStatus from '@/components/server/files/FileManagerStatus';
+import MassActionsBar from '@/components/server/files/MassActionsBar';
+import UploadButton from '@/components/server/files/UploadButton';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { useStoreActions } from '@/state/hooks';
+import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import { FileActionCheckbox } from '@/components/server/files/SelectFileCheckbox';
+import { hashToPath } from '@/helpers';
+import style from './style.module.css';
 
-const svgProps = {
-    cx: 16,
-    cy: 16,
-    r: 14,
-    strokeWidth: 3,
-    fill: 'none',
-    stroke: 'currentColor',
+const sortFiles = (files: FileObject[]): FileObject[] => {
+    const sortedFiles: FileObject[] = files
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .sort((a, b) => (a.isFile === b.isFile ? 0 : a.isFile ? 1 : -1));
+    return sortedFiles.filter((file, index) => index === 0 || file.name !== sortedFiles[index - 1].name);
 };
-
-const Spinner = ({ progress, className }: { progress: number; className?: string }) => (
-    <svg viewBox={'0 0 32 32'} className={className}>
-        <circle {...svgProps} className={'opacity-25'} />
-        <circle
-            {...svgProps}
-            stroke={'white'}
-            strokeDasharray={28 * Math.PI}
-            className={'rotate-[-90deg] origin-[50%_50%] transition-[stroke-dashoffset] duration-300'}
-            style={{ strokeDashoffset: ((100 - progress) / 100) * 28 * Math.PI }}
-        />
-    </svg>
-);
-
-const FileUploadList = () => {
-    const { close } = useContext(DialogWrapperContext);
-    const cancelFileUpload = ServerContext.useStoreActions((actions) => actions.files.cancelFileUpload);
-    const clearFileUploads = ServerContext.useStoreActions((actions) => actions.files.clearFileUploads);
-    const uploads = ServerContext.useStoreState((state) =>
-        Object.entries(state.files.uploads).sort(([a], [b]) => a.localeCompare(b))
-    );
-
-    return (
-        <div className={'space-y-2 mt-6'}>
-            {uploads.map(([name, file]) => (
-                <div key={name} className={'flex items-center space-x-3 bg-gray-700 p-3 rounded'}>
-                    <Tooltip content={`${Math.floor((file.loaded / file.total) * 100)}%`} placement={'left'}>
-                        <div className={'flex-shrink-0'}>
-                            <Spinner progress={(file.loaded / file.total) * 100} className={'w-6 h-6'} />
-                        </div>
-                    </Tooltip>
-                    <Code className={'flex-1 truncate'}>{name}</Code>
-                    <button
-                        onClick={cancelFileUpload.bind(this, name)}
-                        className={'text-gray-500 hover:text-gray-200 transition-colors duration-75'}
-                    >
-                        <XIcon className={'w-5 h-5'} />
-                    </button>
-                </div>
-            ))}
-            <Dialog.Footer>
-                <Button.Danger variant={Button.Variants.Secondary} onClick={() => clearFileUploads()}>
-                    Cancel Uploads
-                </Button.Danger>
-                <Button.Text onClick={close}>Close</Button.Text>
-            </Dialog.Footer>
-        </div>
-    );
-};
-
-const FileUploadListDialog = asDialog({
-    title: 'File Uploads',
-    description: 'The following files are being uploaded to your server.',
-})(FileUploadList);
 
 export default () => {
-    const open = useSignal(false);
+    const id = ServerContext.useStoreState((state) => state.server.data!.id);
+    const { hash } = useLocation();
+    const { data: files, error, mutate } = useFileManagerSwr();
+    const directory = ServerContext.useStoreState((state) => state.files.directory);
+    const clearFlashes = useStoreActions((actions) => actions.flashes.clearFlashes);
+    const setDirectory = ServerContext.useStoreActions((actions) => actions.files.setDirectory);
 
-    const count = ServerContext.useStoreState((state) => Object.keys(state.files.uploads).length);
-    const progress = ServerContext.useStoreState((state) => ({
-        uploaded: Object.values(state.files.uploads).reduce((count, file) => count + file.loaded, 0),
-        total: Object.values(state.files.uploads).reduce((count, file) => count + file.total, 0),
-    }));
+    const setSelectedFiles = ServerContext.useStoreActions((actions) => actions.files.setSelectedFiles);
+    const selectedFilesLength = ServerContext.useStoreState((state) => state.files.selectedFiles.length);
 
     useEffect(() => {
-        if (count === 0) {
-            open.value = false;
-        }
-    }, [count]);
+        clearFlashes('files');
+        setSelectedFiles([]);
+        setDirectory(hashToPath(hash));
+    }, [hash]);
+
+    useEffect(() => {
+        mutate();
+    }, [directory]);
+
+    const onSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedFiles(e.currentTarget.checked ? files?.map((file) => file.name) || [] : []);
+    };
+
+    if (error) {
+        return <ServerError message={httpErrorToHuman(error)} onRetry={() => mutate()} />;
+    }
 
     return (
-        <>
-            {count > 0 && (
-                <Tooltip content={`${count} files are uploading, click to view`}>
-                    <button
-                        className={'flex items-center justify-center w-10 h-10'}
-                        onClick={() => (open.value = true)}
-                    >
-                        <Spinner progress={(progress.uploaded / progress.total) * 100} className={'w-8 h-8'} />
-                        <CloudUploadIcon className={'h-3 absolute mx-auto animate-pulse'} />
-                    </button>
-                </Tooltip>
-            )}
-            <FileUploadListDialog open={open.value} onClose={() => (open.value = false)} />
-        </>
+        <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
+            {/* --- ADDED CARD WRAPPER --- */}
+            <div css={tw`bg-neutral-800 rounded-xl border border-neutral-700 shadow-lg p-4 mt-4`}>
+                <ErrorBoundary>
+                    <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
+                        <FileManagerBreadcrumbs
+                            renderLeft={
+                                <FileActionCheckbox
+                                    type={'checkbox'}
+                                    css={tw`mx-4`}
+                                    checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
+                                    onChange={onSelectAllClick}
+                                />
+                            }
+                        />
+                        <Can action={'file.create'}>
+                            <div className={style.manager_actions}>
+                                <FileManagerStatus />
+                                <NewDirectoryButton />
+                                <UploadButton />
+                                <NavLink to={`/server/${id}/files/new${window.location.hash}`}>
+                                    <Button>New File</Button>
+                                </NavLink>
+                            </div>
+                        </Can>
+                    </div>
+                </ErrorBoundary>
+                {!files ? (
+                    <Spinner size={'large'} centered />
+                ) : (
+                    <>
+                        {!files.length ? (
+                            <p css={tw`text-sm text-neutral-400 text-center`}>This directory seems to be empty.</p>
+                        ) : (
+                            <CSSTransition classNames={'fade'} timeout={150} appear in>
+                                <div>
+                                    {files.length > 250 && (
+                                        <div css={tw`rounded bg-yellow-400 mb-px p-3`}>
+                                            <p css={tw`text-yellow-900 text-sm text-center`}>
+                                                This directory is too large to display in the browser, limiting the
+                                                output to the first 250 files.
+                                            </p>
+                                        </div>
+                                    )}
+                                    {sortFiles(files.slice(0, 250)).map((file) => (
+                                        <FileObjectRow key={file.key} file={file} />
+                                    ))}
+                                    <MassActionsBar />
+                                </div>
+                            </CSSTransition>
+                        )}
+                    </>
+                )}
+            </div>
+            {/* --- END CARD WRAPPER --- */}
+        </ServerContentBlock>
     );
 };

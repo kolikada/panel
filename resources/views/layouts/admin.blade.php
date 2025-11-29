@@ -35,20 +35,20 @@
             <![endif]-->
         @show
     </head>
-    <body class="hold-transition skin-tekura fixed sidebar-mini bg-neutral-900" style="color: #18DBFF !important;">
-        <div class="wrapper">
+    <body class="hold-transition skin-tekura fixed sidebar-mini bg-neutral-900" style="color: #18DBFF !important;"> 
+        <div class="wrapper" >
             <header class="main-header" style="color: #18DBFF !important;">
                 <a href="{{ route('index') }}" class="logo" style="color: #18DBFF !important;" >
-                    <img src="/assets/svgs/Tekkura.svg" alt="Tekkura Panel" style="height: 30px; margin-top: -5px;" /> Tekkura Panel
+                    <img src="/assets/svgs/Tekkura.svg" alt="Tekkura Panel" style="height: 30px; margin-top: -5px;" /> Tekkura Admin
                 </a>
-                <nav class="navbar navbar-static-top">
+                <nav class="navbar navbar-static-top" style="background-color: hsl(220, 25%, 10%) !important;">
                     <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" style="color: #18DBFF !important;">
                         <span  class="sr-only">Toggle navigation</span >
                         <span  class="icon-bar"></span >
                         <span  class="icon-bar"></span >
                         <span  class="icon-bar"></span >
                     </a>
-                    <div class="navbar-custom-menu" >
+                    <div class="navbar-custom-menu" style="background-color: hsl(220, 25%, 10%) !important;">
                         <ul class="nav navbar-nav">
                             <li class="user-menu">
                                 <a href="{{ route('account') }}" style="color: #18DBFF !important;">
@@ -68,8 +68,8 @@
             </header>
             <aside class="main-sidebar" style="background-color: hsl(220, 25%, 10%) !important;">
                 <section class="sidebar" style="background-color: hsl(220, 25%, 10%) !important;">
-                    <ul class="sidebar-menu">
-                        <li class="header">ADMINISTRATION</li>
+                    <ul class="sidebar-menu" >
+                        <li class="header" style="color: #ffffffff !important;">ADMINISTRATION</li>
                         <li class="{{ Route::currentRouteName() !== 'admin.index' ?: 'active' }}">
                             <a href="{{ route('admin.index') }}">
                                 <i class="fa fa-home" style="color: #18DBFF !important;"></i> <span  style="color: #18DBFF !important;">Overview</span >
@@ -85,7 +85,7 @@
                                 <i class="fa fa-gamepad" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Application API</span >
                             </a>
                         </li>
-                        <li class="header">MANAGEMENT</li>
+                        <li class="header" style="color: #ffffffff !important;">MANAGEMENT</li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.databases') ?: 'active' }}">
                             <a href="{{ route('admin.databases') }}">
                                 <i class="fa fa-database" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Databases</span >
@@ -111,7 +111,7 @@
                                 <i class="fa fa-users"style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Users</span >
                             </a>
                         </li>
-                        <li class="header">SERVICE MANAGEMENT</li>
+                        <li class="header" style="color: #ffffffff !important;">SERVICE MANAGEMENT</li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.mounts') ?: 'active' }}">
                             <a href="{{ route('admin.mounts') }}">
                                 <i class="fa fa-magic" style="color: #18DBFF !important;"></i> <span style="color: #18DBFF !important;">Mounts</span >
@@ -125,8 +125,8 @@
                     </ul>
                 </section>
             </aside>
-            <div class="content-wrapper" style="color: #18DBFF !important;">
-                <section class="content-header">
+            <div class="content-wrapper" style="background-color: hsl(218, 20%, 15%) !important;">
+                <section class="content-header" style="background-color: hsl(218, 20%, 15%) !important;">
                     @yield('content-header')
                 </section>
                 <section class="content">
@@ -154,7 +154,7 @@
                     @yield('content')
                 </section>
             </div>
-            <footer class="main-footer">
+            <footer class="main-footer" style="background-color: hsl(220, 25%, 10%) !important;">
                 <div class="pull-right small text-gray" style="margin-right:10px;margin-top:-7px;">
                     <strong><i class="fa fa-fw {{ $appIsGit ? 'fa-git-square' : 'fa-code-fork' }}"></i></strong> {{ $appVersion }}<br />
                     <strong><i class="fa fa-fw fa-clock-o"></i></strong> {{ round(microtime(true) - LARAVEL_START, 3) }}s

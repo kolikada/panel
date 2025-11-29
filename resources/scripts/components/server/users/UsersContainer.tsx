@@ -49,17 +49,25 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Users'}>
-            <FlashMessageRender byKey={'users'} css={tw`mb-4`} />
-            {!subusers.length ? (
-                <p css={tw`text-center text-sm text-neutral-300`}>It looks like you don&apos;t have any subusers.</p>
-            ) : (
-                subusers.map((subuser) => <UserRow key={subuser.uuid} subuser={subuser} />)
-            )}
-            <Can action={'user.create'}>
-                <div css={tw`flex justify-end mt-6`}>
-                    <AddSubuserButton />
-                </div>
-            </Can>
+            {/* --- ADDED CARD WRAPPER --- */}
+            <div css={tw`bg-neutral-800 rounded-xl border border-neutral-700 shadow-lg p-4 mt-4`}>
+                <FlashMessageRender byKey={'users'} css={tw`mb-4`} />
+
+                {!subusers.length ? (
+                    <p css={tw`text-center text-sm text-neutral-300`}>
+                        It looks like you don&apos;t have any subusers.
+                    </p>
+                ) : (
+                    subusers.map((subuser) => <UserRow key={subuser.uuid} subuser={subuser} />)
+                )}
+
+                <Can action={'user.create'}>
+                    <div css={tw`flex justify-end mt-6`}>
+                        <AddSubuserButton />
+                    </div>
+                </Can>
+            </div>
+            {/* --- END CARD WRAPPER --- */}
         </ServerContentBlock>
     );
 };

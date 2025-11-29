@@ -38,43 +38,47 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Databases'}>
-            <FlashMessageRender byKey={'databases'} css={tw`mb-4`} />
-            {!databases.length && loading ? (
-                <Spinner size={'large'} centered />
-            ) : (
-                <Fade timeout={150}>
-                    <>
-                        {databases.length > 0 ? (
-                            databases.map((database, index) => (
-                                <DatabaseRow
-                                    key={database.id}
-                                    database={database}
-                                    className={index > 0 ? 'mt-1' : undefined}
-                                />
-                            ))
-                        ) : (
-                            <p css={tw`text-center text-sm text-neutral-300`}>
-                                {databaseLimit > 0
-                                    ? 'It looks like you have no databases.'
-                                    : 'Databases cannot be created for this server.'}
-                            </p>
-                        )}
-                        <Can action={'database.create'}>
-                            <div css={tw`mt-6 flex items-center justify-end`}>
-                                {databaseLimit > 0 && databases.length > 0 && (
-                                    <p css={tw`text-sm text-neutral-300 mb-4 sm:mr-6 sm:mb-0`}>
-                                        {databases.length} of {databaseLimit} databases have been allocated to this
-                                        server.
-                                    </p>
-                                )}
-                                {databaseLimit > 0 && databaseLimit !== databases.length && (
-                                    <CreateDatabaseButton css={tw`flex justify-end mt-6`} />
-                                )}
-                            </div>
-                        </Can>
-                    </>
-                </Fade>
-            )}
+            {/* --- ADDED CARD WRAPPER --- */}
+            <div css={tw`bg-neutral-800 rounded-xl border border-neutral-700 shadow-lg p-4 mt-4`}>
+                <FlashMessageRender byKey={'databases'} css={tw`mb-4`} />
+                {!databases.length && loading ? (
+                    <Spinner size={'large'} centered />
+                ) : (
+                    <Fade timeout={150}>
+                        <>
+                            {databases.length > 0 ? (
+                                databases.map((database, index) => (
+                                    <DatabaseRow
+                                        key={database.id}
+                                        database={database}
+                                        className={index > 0 ? 'mt-1' : undefined}
+                                    />
+                                ))
+                            ) : (
+                                <p css={tw`text-center text-sm text-neutral-300`}>
+                                    {databaseLimit > 0
+                                        ? 'It looks like you have no databases.'
+                                        : 'Databases cannot be created for this server.'}
+                                </p>
+                            )}
+                            <Can action={'database.create'}>
+                                <div css={tw`mt-6 flex items-center justify-end`}>
+                                    {databaseLimit > 0 && databases.length > 0 && (
+                                        <p css={tw`text-sm text-neutral-300 mb-4 sm:mr-6 sm:mb-0`}>
+                                            {databases.length} of {databaseLimit} databases have been allocated to this
+                                            server.
+                                        </p>
+                                    )}
+                                    {databaseLimit > 0 && databaseLimit !== databases.length && (
+                                        <CreateDatabaseButton css={tw`flex justify-end mt-6`} />
+                                    )}
+                                </div>
+                            </Can>
+                        </>
+                    </Fade>
+                )}
+            </div>
+            {/* --- END CARD WRAPPER --- */}
         </ServerContentBlock>
     );
 };

@@ -2,28 +2,31 @@ import styled from 'styled-components/macro';
 import tw, { theme } from 'twin.macro';
 
 const SubNavigation = styled.div`
-    ${tw`w-full bg-neutral-700 shadow overflow-x-auto`};
+    // Added 'pb-2' to give space for the scrollbar
+    ${tw`w-full max-w-6xl mx-auto bg-neutral-800 shadow overflow-x-auto rounded-xl mb-4 pb-2`};
 
     & > div {
         ${tw`flex items-center text-sm mx-auto px-2`};
-        max-width: 1200px;
+        ${tw`w-full`};
 
         & > a,
         & > div {
-            ${tw`inline-block py-3 px-4 text-neutral-300 no-underline whitespace-nowrap transition-all duration-150`};
+            // --- INDIVIDUAL TAB STYLES: ADD rounded-lg ---
+            ${tw`inline-block py-3 px-4 text-neutral-100 no-underline whitespace-nowrap transition-all duration-150 rounded-lg`}; // ADDED rounded-lg HERE
 
             &:not(:first-of-type) {
                 ${tw`ml-2`};
             }
 
             &:hover {
-                ${tw`text-neutral-100`};
+                ${tw`text-primary-500`};
             }
 
+            // --- ACTIVE/CURRENT TAB HIGHLIGHT ---
             &:active,
             &.active {
-                ${tw`text-neutral-100`};
-                box-shadow: inset 0 -2px ${theme`colors.cyan.600`.toString()};
+                ${tw`text-primary-500`};
+                box-shadow: inset 0 2px ${theme`colors.primary.500`.toString()};
             }
         }
     }

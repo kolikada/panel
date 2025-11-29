@@ -74,7 +74,7 @@ const LoginContainer = ({ history }: RouteComponentProps) => {
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
-                <LoginFormContainer title={'Tekkura Panel Login'} css={tw`w-full flex`}>
+                <LoginFormContainer title={'Tekkura Login Panel'} css={tw`max-w-xl mx-auto flex `}>
                     <Field type={'text'} label={'Username or Email'} name={'username'} disabled={isSubmitting} />
                     <div css={tw`mt-6`}>
                         <Field type={'password'} label={'Password'} name={'password'} disabled={isSubmitting} />
@@ -96,6 +96,7 @@ const LoginContainer = ({ history }: RouteComponentProps) => {
                             ref={ref}
                             size={'invisible'}
                             sitekey={siteKey || '_invalid_key'}
+                            theme={'dark'}
                             onVerify={(response) => {
                                 setToken(response);
                                 submitForm();
