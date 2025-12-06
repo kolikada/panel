@@ -71,7 +71,7 @@ export default () => {
                 {/* --- LEFT SIDE: LOGO & BRANDING --- */}
                 <div id={'logo'} className={'flex-1'}>
                     <Link to={'/'} className={'px-4 no-underline transition-colors duration-150 flex items-center'}>
-                        <img src='/assets/svgs/Tekkura.svg' alt='Tekkura Logo' style={{ height: '32px' }} />
+                        <img src='/assets/svgs/Tekkura.svg' alt='Tekkura Logo' style={{ height: '50px' }} />
                         <span className={'text-xl font-header ml-2 text-primary-500'}>Tekkura</span>
                     </Link>
                 </div>
