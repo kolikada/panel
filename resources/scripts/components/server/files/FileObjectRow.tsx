@@ -7,13 +7,20 @@ import { FileObject } from '@/api/server/files/loadDirectory';
 import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
 import { NavLink, useRouteMatch } from 'react-router-dom';
-import tw from 'twin.macro';
+import tw, { styled } from 'twin.macro';
 import isEqual from 'react-fast-compare';
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 import { usePermissions } from '@/plugins/usePermissions';
 import { join } from 'path';
 import { bytesToString } from '@/lib/formatters';
-import styles from './style.module.css';
+
+// 1. REPLACED CSS CLASSES WITH TWIN MACRO STYLES
+const Row = styled.div`
+    ${tw`flex items-center cursor-pointer bg-neutral-700 rounded-sm mb-px text-sm no-underline hover:text-neutral-100 hover:bg-neutral-600`};
+`;
+
+// Shared style for the "details" part of the row
+const detailsStyle = tw`flex flex-1 items-center text-neutral-300 no-underline px-4 py-2 overflow-hidden truncate`;
 
 const Clickable: React.FC<{ file: FileObject }> = memo(({ file, children }) => {
     const [canRead] = usePermissions(['file.read']);
@@ -23,10 +30,10 @@ const Clickable: React.FC<{ file: FileObject }> = memo(({ file, children }) => {
     const match = useRouteMatch();
 
     return (file.isFile && (!file.isEditable() || !canReadContents)) || (!file.isFile && !canRead) ? (
-        <div className={styles.details}>{children}</div>
+        <div css={detailsStyle}>{children}</div>
     ) : (
         <NavLink
-            className={styles.details}
+            css={detailsStyle}
             to={`${match.url}${file.isFile ? '/edit' : ''}#${encodePathSegments(join(directory, file.name))}`}
         >
             {children}
@@ -35,8 +42,7 @@ const Clickable: React.FC<{ file: FileObject }> = memo(({ file, children }) => {
 }, isEqual);
 
 const FileObjectRow = ({ file }: { file: FileObject }) => (
-    <div
-        className={styles.file_row}
+    <Row
         key={file.name}
         onContextMenu={(e) => {
             e.preventDefault();
@@ -63,7 +69,7 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
             </div>
         </Clickable>
         <FileDropdownMenu file={file} />
-    </div>
+    </Row>
 );
 
 export default memo(FileObjectRow, (prevProps, nextProps) => {

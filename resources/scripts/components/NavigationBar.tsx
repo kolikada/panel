@@ -35,17 +35,18 @@ const RightNavigation = styled.div`
             &:after {
                 content: '';
                 position: absolute;
-                bottom: 0;
+                bottom: 2px; /* Changed from 0 to 2px to lift it up slightly */
                 left: 50%;
-                transform: translateX(-50%); /* Center it */
+                transform: translateX(-50%);
 
-                width: 20px; /* Make it short */
-                height: 3px; /* Make it thick */
-                border-radius: 4px 4px 0 0; /* Round the top corners */
+                width: 20px;
+                height: 3px;
+                border-radius: 4px; /* Fully round it for a cleaner look */
+                z-index: 50; /* Ensure it stays above everything else */
 
                 /* Color & Glow */
                 background-color: ${theme`colors.primary.500`.toString()};
-                box-shadow: 0 -2px 8px ${theme`colors.primary.500`.toString()};
+                box-shadow: 0 0 8px ${theme`colors.primary.500`.toString()};
             }
         }
     }
@@ -65,7 +66,7 @@ export default () => {
 
     return (
         // Added border-b border-neutral-800 for the subtle separator line
-        <div className={'w-full bg-neutral-900 overflow-x-auto'}>
+        <div className={'w-full bg-neutral-900 '}>
             <SpinnerOverlay visible={isLoggingOut} />
             <div className={'mx-auto w-full flex items-center h-[3.5rem] max-w-[1200px]'}>
                 {/* --- LEFT SIDE: LOGO & BRANDING --- */}
